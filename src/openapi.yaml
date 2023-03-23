@@ -41,7 +41,7 @@ paths:
         - user
       summary: modify an existing user
       description: modify an existing user by passing the user object
-      operationId: updateUser
+      operationId: updateUserOld
       requestBody:
         description: This is the user object to be modified
         content:
@@ -591,6 +591,107 @@ paths:
           description: Invalid username supplied
         '404':
           description: User not found
+  /beers:
+    get:
+      tags:
+        - Beers
+      summary: Get all beers, can be filtered
+      description: ''
+      operationId: getAllBears
+      parameters:
+        - name: abv_gt
+          in: query
+          description: 'The abv value to filter beers that have it greater than. '
+          required: true
+          schema:
+            type: string
+            default: 0
+        - name: abv_lt
+          in: query
+          description: 'The abv value to filter beers that have it lesser than. '
+          required: true
+          schema:
+            type: string
+            default: 0
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Beer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+    put:
+      tags:
+        - Beers
+      summary: Update beer
+      description: Update a beer
+      operationId: updateBeer
+      requestBody:
+        description: Update an existing beer
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Beer'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/Beer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Beer'
+      responses:
+        default:
+          description: successful operation
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Beer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+        '404':
+          description: Beer to update not found
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Beer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+    delete:
+      tags:
+        - Beers
+      summary: Delete beer
+      description: Delete a beer
+      operationId: deleteBeer
+      parameters:
+        - name: id
+          in: query
+          description: The id of the beer that needs to be deleted
+          required: true
+          schema:
+            type: number
+      responses:
+        '400':
+          description: Invalid beer supplied
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Beer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
+        '404':
+          description: Beer not found
+          content:
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Beer'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Beer'
 components:
   schemas:
     Order:
@@ -701,6 +802,33 @@ components:
           description: User Status
           format: int32
           example: 1
+      xml:
+        name: user
+    Beer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: light beer
+        tagline:
+          type: string
+          example: tagline
+        first_brewed:
+          type: string
+          format: date-time
+        description:
+          type: string
+          example: this beer is awesome
+        imageUrl:
+          type: string
+          example: 'https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.delish.com%2Ffood%2Fg937%2Falternative-uses-for-beer%2F&psig=AOvVaw3Ysw5U-QuyLtosE0cPczSD&ust=1679679488237000&source=images&cd=vfe&ved=0CBAQjRxqFwoTCJDQ6uvL8v0CFQAAAAAdAAAAABAD'
+        abv:
+          type: number
+          example: 4.5
       xml:
         name: user
     Tag:
